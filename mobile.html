@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AmorFlix - Mobile</title>
+  <style>
+    :root {
+      --preto: #141414;
+      --vermelho: #e50914;
+      --cinza: #999;
+      --branco: #fff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--preto);
+      color: var(--branco);
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-poster {
+      width: 100%;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-poster .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .hero-poster .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 40%, #141414 100%);
+    }
+
+    .hero-poster .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .detalhes {
+      font-size: 0.9rem;
+      color: var(--cinza);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .descricao {
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .botoes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .botoes button {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .play-button {
+      background-color: var(--vermelho);
+      color: white;
+    }
+
+    .fav-button {
+      background-color: #333;
+      color: white;
+    }
+
+    .momentos {
+      padding: 2rem 1rem;
+      background-color: #181818;
+      animation: fadeInUp 1.2s ease both;
+    }
+
+    .momentos h2 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .momentos-carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 1rem;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideIn 1.2s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .momento {
+      flex: 0 0 auto;
+      width: 140px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    .momento img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 🎬 Lightbox com animação suave de entrada e saída */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .lightbox.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox.hide {
+      opacity: 0;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 8px;
+      transform: scale(0.85);
+      opacity: 0;
+      animation: zoomIn 0.4s ease forwards;
+    }
+
+    @keyframes zoomIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .contadorTempo{
+      font-weight: bold;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="hero-section">
+    <div class="hero-poster">
+      <div class="slide active" style="background-image: url('Foto5.jpg')"></div>
+      <div class="slide" style="background-image: url('Foto6.jpg')"></div>
+      <div class="slide" style="background-image: url('Foto7.jpg')"></div>
+    </div>
+
+    <div class="hero-content">
+      <h1>Vi & Bia</h1>
+      <div class="detalhes">
+        <span>99999% relevante</span>
+        <span class="classificacao">L</span>
+        <span>Para todo sempre</span>
+      </div>
+      <p class="descricao">
+        Desde o dia que te conheci, tudo mudou. Você é minha série favorita, que eu nunca quero que acabe. <br />
+        Melhor que o Diário de um Banana (Vampiro) KKKKKKKK
+      </p>
+      <div class="botoes">
+        <button class="play-button">▶ Assistir</button>
+        <button class="fav-button">❤ Favorito</button>
+        <a href="desktop.html" style="color: #ccc;">Acessar versão desktop</a>
+      </div>
+      <p class="contadorTempo" id="contadorTempo"></p>
+    </div>
+  </main>
+
+  <section class="momentos">
+    <h2>Nossos Momentos</h2>
+    <div class="momentos-carousel">
+      <div class="momento"><img src="Foto1.jpg" alt="Momento 1" /></div>
+      <div class="momento"><img src="Foto2.jpg" alt="Momento 2" /></div>
+      <div class="momento"><img src="Foto3.jpg" alt="Momento 3" /></div>
+      <div class="momento"><img src="Foto4.jpg" alt="Momento 4" /></div>
+      <div class="momento"><img src="Foto8.jpg" alt="Momento 5" /></div>
+      <div class="momento"><img src="Foto9.jpg" alt="Momento 6" /></div>
+      <div class="momento"><img src="Foto10.jpg" alt="Momento 7" /></div>
+    </div>
+  </section>
+
+  <!-- 🖼️ Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <img id="lightbox-img" src="" alt="Imagem ampliada" />
+  </div>
+
+  <script>
+    // Slideshow
+    const slides = document.querySelectorAll('.hero-poster .slide');
+    let current = 0;
+
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+
+    // Contador
+    document.addEventListener('DOMContentLoaded', () => {
+      function atualizarContagem() {
+        const dataInicio = new Date(2025, 3, 12, 0, 0, 0);
+        const agora = new Date();
+        const diferenca = agora - dataInicio;
+
+        const segundos = Math.floor((diferenca / 1000) % 60);
+        const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
+        const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
+        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+
+        document.getElementById("contadorTempo").textContent =
+          `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos juntos.`;
+      }
+
+      atualizarContagem();
+      setInterval(atualizarContagem, 1000);
+    });
+
+    // 💡 Light
+    document.addEventListener('DOMContentLoaded', () => {
+      const momentos = document.querySelectorAll('.momento img');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+
+      momentos.forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightbox.style.display = 'flex';
+          lightbox.classList.remove('hide');
+          lightbox.classList.add('show');
+
+        });
+      });
+
+      lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('show');
+        lightbox.classList.add('hide');
+        setTimeout(() => {
+          lightbox.style.display = 'none';
+        }, 400);
+      });
+    });
+
+  </script>

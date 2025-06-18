@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AmorFlix</title>
+  <script>
+    // Redireciona baseado na largura da tela
+    if (window.innerWidth <= 768) {
+      window.location.href = "mobile.html";
+    } else {
+      window.location.href = "desktop.html";
+    }
+  </script>
+</head>
+<body>
+  <!-- Caso JS demore, pode exibir algo -->
+  <p style="text-align:center; padding: 2rem;">Carregando AmorFlix...</p>
+</body>
+</html>
