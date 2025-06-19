@@ -63,7 +63,7 @@
       width: 100%;
       padding: 1.5rem;
       box-sizing: border-box;
-      text-align: center;
+      text-align: left;
     }
 
     .hero-content h1 {
@@ -71,14 +71,16 @@
       margin: 1rem 0 0.5rem 0;
     }
 
+
     .detalhes {
       font-size: 0.9rem;
-      color: var(--cinza);
-      margin-bottom: 1rem;
+      color: rgb(184, 184, 184);
+      margin-bottom: 0.5rem;
       display: flex;
-      justify-content: center;
+      justify-content: left;
       gap: 1rem;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .descricao {
@@ -86,6 +88,7 @@
       font-size: 1rem;
       margin-bottom: 1.5rem;
       line-height: 1.5;
+      justify-content: left;
     }
 
     .botoes {
@@ -97,16 +100,17 @@
 
     .botoes button {
       width: 100%;
-      padding: 0.9rem;
+      padding: 0.5rem;
       font-size: 1rem;
+      font-weight: bold;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
 
     .play-button {
-      background-color: var(--vermelho);
-      color: white;
+      background-color: var(--branco);
+      color: black;
     }
 
     .fav-button {
@@ -120,11 +124,6 @@
       animation: fadeInUp 1.2s ease both;
     }
 
-    .momentos h2 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
 
     .momentos-carousel {
       display: flex;
@@ -175,6 +174,37 @@
       }
     }
 
+    .categorias-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1rem;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .tab-btn.active {
+      background: var(--vermelho);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+
     /* 🎬 Lightbox com animação suave de entrada e saída */
     .lightbox {
       display: none;
@@ -213,14 +243,242 @@
       }
     }
 
-    .contadorTempo{
+    .contadorTempo {
       font-weight: bold;
-      font-size: 20px;
+      font-size: 13px;
+      color: #f3444c;
+    }
+
+    .classificacao {
+      width: 25px;
+      height: 25px;
+      vertical-align: middle;
+    }
+
+    .categorias-tabs {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      /* Agora alinha à esquerda */
+      gap: 30px;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      padding-left: 1rem;
+      /* Espaço da borda esquerda */
+    }
+
+    .tab-label {
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      position: relative;
+      color: #ccc;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .tab-label.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    .barra-indicador {
+      position: absolute;
+      top: 0;
+      height: 3px;
+      width: 0;
+      background-color: var(--vermelho);
+      transition: all 0.3s ease;
+    }
+
+    #heart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-image: url('https://img.icons8.com/emoji/48/000000/red-heart.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: fall 2s ease-out forwards;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) scale(0.8) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .fav-button.clicked {
+      background-color: var(--vermelho) !important;
+      color: white;
+      transition: background-color 0.4s ease;
+      animation: pulse 0.4s ease;
+    }
+
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .fav-button span.heart-icon {
+      display: inline-block;
+      transition: transform 0.4s ease;
+    }
+
+    .entrada-transicao {
+      position: fixed;
+      inset: 0;
+      background-color: #e50914;
+      z-index: 9999;
+      opacity: 1;
+      transform: scaleY(1);
+      transform-origin: top;
+      transition: transform 0.7s ease, opacity 0.7s ease;
+    }
+
+    .entrada-transicao.oculta {
+      transform: scaleY(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .boas-vindas {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(20, 20, 20, 0.85);
+      color: white;
+      padding: 1.2rem 2rem;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeInOut 2.5s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+    }
+
+    .avatar-flutuante {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 56px;
+      height: 56px;
+      background-color: #e50914;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .avatar-flutuante img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .painel-perfil {
+      position: fixed;
+      bottom: 80px;
+      right: 1.5rem;
+      background-color: #181818;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      transform: scale(0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 998;
+    }
+
+    .painel-perfil.aberto {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+
+    .painel-perfil p {
+      margin: 0 0 0.5rem;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .painel-perfil button {
+      background: #e50914;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
+
+  <div class="entrada-transicao" id="entrada-transicao"></div>
+  <div class="boas-vindas" id="boas-vindas"></div>
+
 
   <main class="hero-section">
     <div class="hero-poster">
@@ -231,43 +489,77 @@
 
     <div class="hero-content">
       <h1>Vi & Bia</h1>
+
       <div class="detalhes">
-        <span>99999% relevante</span>
-        <span class="classificacao">L</span>
-        <span>Para todo sempre</span>
+        <span>2025 <img class="classificacao" src="DJCTQ_-_L.svg" alt="Classificacao"> Para a vida inteira</span> <br>
       </div>
-      <p class="descricao">
-        Desde o dia que te conheci, tudo mudou. Você é minha série favorita, que eu nunca quero que acabe. <br />
-        Melhor que o Diário de um Banana (Vampiro) KKKKKKKK
-      </p>
+
       <div class="botoes">
         <button class="play-button">▶ Assistir</button>
-        <button class="fav-button">❤ Favorito</button>
+        <button class="fav-button">
+          <span class="heart-icon">❤</span> <span class="label-text">Favoritar</span>
+        </button>
+
         <a href="desktop.html" style="color: #ccc;">Acessar versão desktop</a>
+        <!-- Já no final do <body> -->
+        <div id="heart-container"></div>
       </div>
+
+      <p class="descricao">
+        Desde o dia que te conheci, tudo mudou. Você é minha série favorita, que eu nunca quero que acabe.
+      </p>
+
       <p class="contadorTempo" id="contadorTempo"></p>
     </div>
   </main>
 
   <section class="momentos">
-    <h2>Nossos Momentos</h2>
-    <div class="momentos-carousel">
-      <div class="momento"><img src="Foto1.jpg" alt="Momento 1" /></div>
-      <div class="momento"><img src="Foto2.jpg" alt="Momento 2" /></div>
-      <div class="momento"><img src="Foto3.jpg" alt="Momento 3" /></div>
-      <div class="momento"><img src="Foto4.jpg" alt="Momento 4" /></div>
-      <div class="momento"><img src="Foto8.jpg" alt="Momento 5" /></div>
-      <div class="momento"><img src="Foto9.jpg" alt="Momento 6" /></div>
-      <div class="momento"><img src="Foto10.jpg" alt="Momento 7" /></div>
+    <div class="categorias-tabs">
+      <div class="tab-label active" data-tab="momentos">Nossa galeria</div>
+      <div class="tab-label" data-tab="viagens">Nossos momentos</div>
+      <div class="barra-indicador"></div>
+    </div>
+
+
+    <div class="tab-content active" id="momentos">
+      <div class="momentos-carousel">
+        <div class="momento"><img src="Foto1.jpg" alt="Momento 1" /></div>
+        <div class="momento"><img src="Foto2.jpg" alt="Momento 2" /></div>
+        <div class="momento"><img src="Foto3.jpg" alt="Momento 3" /></div>
+        <div class="momento"><img src="Foto4.jpg" alt="Momento 4" /></div>
+        <div class="momento"><img src="Foto10.jpg" alt="Momento 7" /></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="viagens">
+      <div class="momentos-carousel">
+        <div class="momento"><img src="Foto6.jpg" alt="Especial 1" /></div>
+        <div class="momento"><img src="Foto7.jpg" alt="Especial 2" /></div>
+        <div class="momento"><img src="Foto8.jpg" alt="Especial 3" /></div>
+        <div class="momento"><img src="Foto9.jpg" alt="Especial 4" /></div>
+      </div>
     </div>
   </section>
+
 
   <!-- 🖼️ Lightbox -->
   <div id="lightbox" class="lightbox">
     <img id="lightbox-img" src="" alt="Imagem ampliada" />
   </div>
 
+  <div class="avatar-flutuante" onclick="togglePainel()">
+    <img id="avatar-foto" src="perfil-padrao.png" alt="Perfil">
+  </div>
+
+  <div class="painel-perfil" id="painel-perfil">
+    <p>👤 Perfil atual</p>
+    <button onclick="trocarPerfil()">Trocar de perfil</button>
+  </div>
+
+
   <script>
+
+
     // Slideshow
     const slides = document.querySelectorAll('.hero-poster .slide');
     let current = 0;
@@ -322,5 +614,109 @@
         }, 400);
       });
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const labels = document.querySelectorAll('.tab-label');
+      const contents = document.querySelectorAll('.tab-content');
+      const indicador = document.querySelector('.barra-indicador');
+
+      function atualizarBarra(labelAtivo) {
+        const offsetLeft = labelAtivo.offsetLeft;
+        const width = labelAtivo.offsetWidth;
+        indicador.style.left = offsetLeft + 'px';
+        indicador.style.width = width + 'px';
+      }
+
+      labels.forEach(label => {
+        label.addEventListener('click', () => {
+          const tab = label.getAttribute('data-tab');
+
+          labels.forEach(el => el.classList.remove('active'));
+          contents.forEach(content => content.classList.remove('active'));
+
+          label.classList.add('active');
+          document.getElementById(tab).classList.add('active');
+          atualizarBarra(label);
+        });
+      });
+
+      // Posiciona corretamente a barra na aba inicial
+      const inicial = document.querySelector('.tab-label.active');
+      if (inicial) atualizarBarra(inicial);
+    });
+
+    const favButton = document.querySelector('.fav-button');
+    const labelText = favButton.querySelector('.label-text');
+    const heartContainer = document.getElementById('heart-container');
+
+    favButton.addEventListener('click', () => {
+      const isClicked = favButton.classList.toggle('clicked');
+
+      if (isClicked) {
+        // Muda texto
+        labelText.textContent = 'Favorito';
+
+        // Chuva de corações 💘
+        const totalHearts = 50;
+        for (let i = 0; i < totalHearts; i++) {
+          const heart = document.createElement('div');
+          heart.classList.add('heart');
+          heart.style.left = `${Math.random() * 100}vw`;
+          heart.style.animationDuration = `${1 + Math.random()}s`;
+          heart.style.transform = `scale(${Math.random() * 0.8 + 0.6}) rotate(${Math.random() * 360}deg)`;
+          heartContainer.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }
+      } else {
+        // Volta ao padrão
+        labelText.textContent = 'Favoritar';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const entrada = document.getElementById('entrada-transicao');
+      const urlParams = new URLSearchParams(window.location.search);
+      const perfil = urlParams.get('perfil');
+      const boasVindas = document.getElementById('boas-vindas');
+
+      if (perfil) {
+        const nome = perfil.charAt(0).toUpperCase() + perfil.slice(1).toLowerCase();
+        boasVindas.textContent = `Olá, ${nome}!`;
+      }
+
+      // Espera a transição e some com ela
+      setTimeout(() => {
+        entrada.classList.add('oculta');
+      }, 100); // mostra por um instante antes de ocultar
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const perfil = new URLSearchParams(location.search).get('perfil');
+      const avatar = document.getElementById('avatar-foto');
+
+      if (perfil && avatar) {
+        avatar.src = `perfil-${perfil}.png`;
+        avatar.alt = `Perfil ${perfil}`;
+      }
+    });
+
+    function togglePainel() {
+      const painel = document.getElementById('painel-perfil');
+      painel.classList.toggle('aberto');
+    }
+
+
+    function trocarPerfil() {
+      const transicao = document.getElementById('entrada-transicao');
+      if (transicao) {
+        transicao.classList.remove('oculta');
+        setTimeout(() => {
+          window.location.href = 'perfil.html';
+        }, 700);
+      } else {
+        window.location.href = 'perfil.html';
+      }
+    }
+
 
   </script>
