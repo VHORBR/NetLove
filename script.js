@@ -1,20 +1,110 @@
+function escreverDigitando(elemento, texto, velocidade = 75) {
+    let i = 0;
+    elemento.textContent = '';
+    elemento.style.opacity = '1';
+
+    const intervalo = setInterval(() => {
+        if (i < texto.length) {
+            elemento.textContent += texto.charAt(i);
+            i++;
+        } else {
+            clearInterval(intervalo);
+            elemento.style.borderRight = 'none';
+
+            // ⏳ Desaparecer após 5 segundos
+            setTimeout(() => {
+                elemento.style.opacity = '0';
+            }, 5000);
+        }
+    }, velocidade);
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const playButton = document.querySelector('.play-button');
     const favoriteButton = document.querySelector('.favorite-button');
+    const overlay = document.getElementById("overlay");
+    const linkMomentos = document.querySelector('a[href="#nossos-momentos"]');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const perfilModal = document.getElementById('perfilModal');
+    const imagemPerfil = document.getElementById('imagemPerfilSelecionado');
+    const profilePic = document.querySelector('.profile-pic');
+    const saudacaoEl = document.getElementById('saudacaoPerfil');
+    const params = new URLSearchParams(window.location.search);
+    const perfil = params.get('perfil');
+    const nomePerfil = perfil ? perfil.charAt(0).toUpperCase() + perfil.slice(1) : null;
 
-    playButton.addEventListener('click', () => {
-        alert('Prepare o coração: nossa história vai começar 💘');
-    });
+    // Saudação com efeito de digitação
+    if (nomePerfil && saudacaoEl) {
+        const mensagem = `Olá ${nomePerfil} 💖`;
+        escreverDigitando(saudacaoEl, mensagem);
+    }
 
-    favoriteButton.addEventListener('click', () => {
-        if (favoriteButton.textContent.includes('Nosso Favorito')) {
-            favoriteButton.innerHTML = '<i class="fas fa-heart"></i> Adicionado aos Favoritos!';
-            favoriteButton.style.backgroundColor = '#e50914';
-        } else {
-            favoriteButton.innerHTML = '<i class="fas fa-check"></i> Nosso Favorito';
-            favoriteButton.style.backgroundColor = 'rgba(109, 109, 110, 0.7)';
-        }
-    });
+    // Botões "Assistir" e "Nosso Favorito"
+    if (playButton) {
+        playButton.addEventListener('click', () => {
+            alert('Prepare o coração: nossa história vai começar 💘');
+        });
+    }
+
+    if (favoriteButton) {
+        let favoritoAtivado = false;
+
+        favoriteButton.addEventListener('click', () => {
+            if (!favoritoAtivado) {
+                // Primeira vez ativa o favorito
+                favoriteButton.innerHTML = '<i class="fas fa-heart"></i> Adicionado aos Favoritos!';
+                favoriteButton.style.backgroundColor = '#e50914';
+                favoritoAtivado = true;
+            }
+
+            // Pulsa o botão sempre
+            favoriteButton.classList.add('pulsando');
+            setTimeout(() => {
+                favoriteButton.classList.remove('pulsando');
+            }, 600);
+
+            // Chuva de corações 💖
+            const rect = favoriteButton.getBoundingClientRect();
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-burst';
+                heart.textContent = '💖';
+
+                // Posição aleatória da tela
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+
+                heart.style.left = `${startX}px`;
+                heart.style.top = `${startY}px`;
+                heart.style.position = 'fixed';
+                heart.style.zIndex = '9999';
+
+                // Movimento aleatório para cima com leveza
+                const offsetX = (Math.random() - 0.5) * 200;
+                const offsetY = -Math.random() * 100 - 100;
+
+                heart.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                heart.style.transition = 'transform 1.2s ease, opacity 1.2s ease';
+                heart.style.opacity = '1';
+
+                document.body.appendChild(heart);
+
+                requestAnimationFrame(() => {
+                    heart.style.opacity = '0';
+                });
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 1200);
+            }
+
+        });
+    }
+
+
 
     // Corações flutuantes
     setInterval(() => {
@@ -39,58 +129,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }, duracao * 1000);
     }, 400);
 
-    // Transição suave ao clicar em "Momentos"
-    const overlay = document.getElementById("overlay");
-    const linkMomentos = document.querySelector('a[href="#nossos-momentos"]');
-
-    linkMomentos.addEventListener("click", function (e) {
-        e.preventDefault();
-        overlay.classList.add("active");
-
-        setTimeout(() => {
-            document.querySelector("#nossos-momentos").scrollIntoView({ behavior: "smooth" });
-        }, 400);
-
-        setTimeout(() => {
-            overlay.classList.remove("active");
-        }, 1000);
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    // Contador de tempo juntos
     function atualizarContagem() {
-        const dataInicio = new Date(2025, 3, 12, 0, 0, 0); // 12 de abril de 2025, meia-noite
+        const dataInicio = new Date(2025, 3, 12, 0, 0, 0);
         const agora = new Date();
-        const diferencaTempo = agora - dataInicio; // Diferença em milissegundos
+        const diferencaTempo = agora - dataInicio;
 
         const segundos = Math.floor((diferencaTempo / 1000) % 60);
         const minutos = Math.floor((diferencaTempo / (1000 * 60)) % 60);
         const horas = Math.floor((diferencaTempo / (1000 * 60 * 60)) % 24);
         const dias = Math.floor(diferencaTempo / (1000 * 60 * 60 * 24));
 
-        document.getElementById("contadorTempo").textContent =
-            `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos juntos 💖`;
+        const contador = document.getElementById("contadorTempo");
+        if (contador) {
+            contador.textContent = `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos juntos 💖`;
+        }
     }
 
     atualizarContagem();
-    setInterval(atualizarContagem, 1000); // Atualiza a cada segundo
-});
+    setInterval(atualizarContagem, 1000);
 
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = lightbox.querySelector('img');
+    // Link Momentos com transição
+    if (linkMomentos) {
+        linkMomentos.addEventListener("click", function (e) {
+            e.preventDefault();
+            overlay.classList.add("active");
 
-document.querySelectorAll('.moment-item img').forEach(img => {
-  img.addEventListener('click', () => {
-    lightboxImg.src = img.src;
-    lightbox.style.display = 'flex';
-    lightboxImg.style.animation = "fadeInZoom 0.3s ease forwards";
-  });
-});
+            setTimeout(() => {
+                document.querySelector("#nossos-momentos").scrollIntoView({ behavior: "smooth" });
+            }, 400);
 
-lightbox.addEventListener('click', () => {
-  lightboxImg.style.animation = "fadeOutZoom 0.3s ease forwards";
-  
-  setTimeout(() => {
-    lightbox.style.display = 'none';
-  }, 300); // Espera a animação terminar antes de esconder
+            setTimeout(() => {
+                overlay.classList.remove("active");
+            }, 1000);
+        });
+    }
+
+    // Lightbox de imagens
+    document.querySelectorAll('.moment-item img').forEach(img => {
+        img.addEventListener('click', () => {
+            lightboxImg.src = img.src;
+            lightbox.style.display = 'flex';
+            lightboxImg.style.animation = "fadeInZoom 0.3s ease forwards";
+        });
+    });
+
+    lightbox.addEventListener('click', () => {
+        lightboxImg.style.animation = "fadeOutZoom 0.3s ease forwards";
+        setTimeout(() => {
+            lightbox.style.display = 'none';
+        }, 300);
+    });
+
+    // Modal de perfil
+    if (profilePic) {
+        profilePic.addEventListener('click', () => {
+            perfilModal.style.display = 'flex';
+        });
+    }
+
+    if (perfilModal) {
+        perfilModal.addEventListener('click', (e) => {
+            if (e.target.id === 'perfilModal') {
+                perfilModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Imagem do perfil
+    if (perfil && imagemPerfil) {
+        imagemPerfil.src = `perfil-${perfil}.png`;
+        imagemPerfil.alt = `Perfil de ${nomePerfil}`;
+    }
+    if (perfil && profilePic) {
+        profilePic.src = `perfil-${perfil}.png`;
+        profilePic.alt = `Perfil de ${nomePerfil}`;
+    }
+
 });
