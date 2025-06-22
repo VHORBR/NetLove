@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>AmorFlix - Mobile</title>
+  <style>
+    :root {
+      --preto: #141414;
+      --vermelho: #e50914;
+      --cinza: #999;
+      --branco: #fff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--preto);
+      color: var(--branco);
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-poster {
+      width: 100%;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-poster .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .hero-poster .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 40%, #141414 100%);
+    }
+
+    .hero-poster .slide.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      text-align: left;
+    }
+
+    .hero-content h1 {
+      font-size: 2rem;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+
+    .detalhes {
+      font-size: 0.9rem;
+      color: rgb(184, 184, 184);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: left;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .descricao {
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      justify-content: left;
+    }
+
+    .botoes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .botoes button {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .play-button {
+      background-color: var(--branco);
+      color: black;
+    }
+
+    .fav-button {
+      background-color: #333;
+      color: white;
+    }
+
+    .momentos {
+      padding: 2rem 1rem;
+      background-color: #181818;
+      animation: fadeInUp 1.2s ease both;
+    }
+
+
+    .momentos-carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 1rem;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideIn 1.2s ease forwards;
+      animation-delay: 0.3s;
+    }
+
+    .momento {
+      flex: 0 0 auto;
+      width: 140px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    .momento img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .categorias-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1rem;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .tab-btn.active {
+      background: var(--vermelho);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeInUp 0.5s ease both;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+
+    /* 🎬 Lightbox com animação suave de entrada e saída */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.4s ease;
+      opacity: 0;
+    }
+
+    .lightbox.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox.hide {
+      opacity: 0;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90vh;
+      border-radius: 8px;
+      transform: scale(0.85);
+      opacity: 0;
+      animation: zoomIn 0.4s ease forwards;
+    }
+
+    @keyframes zoomIn {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .contadorTempo {
+      font-weight: bold;
+      font-size: 12px;
+      color: #f3444c;
+    }
+
+    .classificacao {
+      width: 25px;
+      height: 25px;
+      vertical-align: middle;
+    }
+
+    .categorias-tabs {
+      position: relative;
+      display: flex;
+      justify-content: flex-start;
+      /* Agora alinha à esquerda */
+      gap: 30px;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      padding-left: 1rem;
+      /* Espaço da borda esquerda */
+    }
+
+    .tab-label {
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      position: relative;
+      color: #ccc;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .tab-label.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    .barra-indicador {
+      position: absolute;
+      top: 0;
+      height: 3px;
+      width: 0;
+      background-color: var(--vermelho);
+      transition: all 0.3s ease;
+    }
+
+    #heart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 999;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-image: url('https://img.icons8.com/emoji/48/000000/red-heart.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: fall 2s ease-out forwards;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) scale(0.8) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) scale(1.2) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .fav-button.clicked {
+      background-color: var(--vermelho) !important;
+      color: white;
+      transition: background-color 0.4s ease;
+      animation: pulse 0.4s ease;
+    }
+
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.15);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .fav-button span.heart-icon {
+      display: inline-block;
+      transition: transform 0.4s ease;
+    }
+
+    .entrada-transicao {
+      position: fixed;
+      inset: 0;
+      background-color: #e50914;
+      z-index: 9999;
+      opacity: 1;
+      transform: scaleY(1);
+      transform-origin: top;
+      transition: transform 0.7s ease, opacity 0.7s ease;
+    }
+
+    .entrada-transicao.oculta {
+      transform: scaleY(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .boas-vindas {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(20, 20, 20, 0.85);
+      color: white;
+      padding: 1.2rem 2rem;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      z-index: 1000;
+      opacity: 0;
+      animation: fadeInOut 2.5s ease forwards;
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+    }
+
+    .avatar-flutuante {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 56px;
+      height: 56px;
+      background-color: #860303;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    .avatar-flutuante img {
+      width: 44px;
+      height: 44px;
+      /* Mude esta linha: */
+      border-radius: 8px;
+      /* Valor sugerido para um "quadrado" arredondado */
+      /* Ou, se preferir um pouco mais arredondado, mas não círculo: */
+      /* border-radius: 10px; */
+      /* Ou um valor percentual menor para um efeito sutil: */
+      /* border-radius: 20%; */
+
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .painel-perfil {
+      position: fixed;
+      bottom: 80px;
+      right: 1.5rem;
+      background-color: #181818;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      /* Estado inicial oculto e menor */
+      transform: scale(0.9);
+      /* Começa um pouco menor */
+      opacity: 0;
+      /* Começa invisível */
+      pointer-events: none;
+      /* Não interage quando oculto */
+      transition: all 0.3s ease;
+      /* Transição suave para todas as propriedades */
+      z-index: 998;
+    }
+
+    .painel-perfil.aberto {
+      opacity: 1;
+      /* Torna-se visível */
+      transform: scale(1);
+      /* Volta ao tamanho normal (100%) */
+      pointer-events: auto;
+      /* Permite interação quando visível */
+    }
+
+
+    .painel-perfil p {
+      margin: 0 0 0.5rem;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .painel-perfil button {
+      background: #e50914;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="entrada-transicao" id="entrada-transicao"></div>
+  <div class="boas-vindas" id="boas-vindas"></div>
+
+
+  <main class="hero-section">
+    <div class="hero-poster">
+      <div class="slide active" style="background-image: url('Foto5.jpg')"></div>
+      <div class="slide" style="background-image: url('Foto6.jpg')"></div>
+      <div class="slide" style="background-image: url('Foto7.jpg')"></div>
+    </div>
+
+    <div class="hero-content">
+      <h1>Vi & Bia</h1>
+
+      <div class="detalhes">
+        <span>2025 <img class="classificacao" src="DJCTQ_-_L.svg" alt="Classificacao"> Para a vida inteira</span> <br>
+      </div>
+
+      <div class="botoes">
+        <button class="play-button">▶ Assistir</button>
+        <button class="fav-button">
+          <span class="heart-icon">❤</span> <span class="label-text">Favoritar</span>
+        </button>
+
+        <a href="desktop.html" style="color: #ccc;">Acessar versão desktop</a>
+        <!-- Já no final do <body> -->
+        <div id="heart-container"></div>
+      </div>
+
+      <p class="descricao">
+        Desde o dia que te conheci, tudo mudou. Você é minha série favorita, que eu nunca quero que acabe.
+      </p>
+
+      <p class="contadorTempo" id="contadorTempo"></p>
+    </div>
+  </main>
+
+  <section class="momentos">
+    <div class="categorias-tabs">
+      <div class="tab-label active" data-tab="momentos">Nossa galeria</div>
+      <div class="tab-label" data-tab="viagens">Nossos momentos</div>
+      <div class="barra-indicador"></div>
+    </div>
+
+
+    <div class="tab-content active" id="momentos">
+      <div class="momentos-carousel">
+        <div class="momento"><img src="Foto1.jpg" alt="Momento 1" /></div>
+        <div class="momento"><img src="Foto2.jpg" alt="Momento 2" /></div>
+        <div class="momento"><img src="Foto3.jpg" alt="Momento 3" /></div>
+        <div class="momento"><img src="Foto10.jpg" alt="Momento 7" /></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="viagens">
+      <div class="momentos-carousel">
+        <div class="momento"><img src="Foto6.jpg" alt="Especial 1" /></div>
+        <div class="momento"><img src="Foto7.jpg" alt="Especial 2" /></div>
+        <div class="momento"><img src="Foto8.jpg" alt="Especial 3" /></div>
+        <div class="momento"><img src="Foto4.jpg" alt="Especial 4" /></div>
+        <div class="momento"><img src="Foto9.jpg" alt="Especial 5" /></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 🖼️ Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <img id="lightbox-img" src="" alt="Imagem ampliada" />
+  </div>
+
+  <div class="avatar-flutuante" onclick="togglePainel()">
+    <img id="avatar-foto" src="perfil-padrao.png" alt="Perfil">
+  </div>
+
+  <div class="painel-perfil" id="painel-perfil">
+    <p>👤 Perfil atual</p>
+    <button onclick="trocarPerfil()">Trocar de perfil</button>
+  </div>
+
+
+  <script>
+    // 🎞️ Slideshow
+    const slides = document.querySelectorAll('.hero-poster .slide');
+    let current = 0;
+    setInterval(() => {
+      slides[current].classList.remove('active');
+      current = (current + 1) % slides.length;
+      slides[current].classList.add('active');
+    }, 5000);
+
+    // 📆 Contador de tempo juntos
+    document.addEventListener('DOMContentLoaded', () => {
+      function atualizarContagem() {
+        const dataInicio = new Date(2025, 3, 12, 0, 0, 0);
+        const agora = new Date();
+        const diferenca = agora - dataInicio;
+
+        const segundos = Math.floor((diferenca / 1000) % 60);
+        const minutos = Math.floor((diferenca / (1000 * 60)) % 60);
+        const horas = Math.floor((diferenca / (1000 * 60 * 60)) % 24);
+        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+
+        document.getElementById("contadorTempo").textContent =
+          `${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos juntos.`;
+      }
+
+      atualizarContagem();
+      setInterval(atualizarContagem, 1000);
+    });
+
+    // 🖼️ Lightbox
+    document.addEventListener('DOMContentLoaded', () => {
+      const momentos = document.querySelectorAll('.momento img');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+
+      momentos.forEach(img => {
+        img.addEventListener('click', () => {
+          lightboxImg.src = img.src;
+          lightbox.style.display = 'flex';
+          lightbox.classList.remove('hide');
+          lightbox.classList.add('show');
+        });
+      });
+
+      lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('show');
+        lightbox.classList.add('hide');
+        setTimeout(() => {
+          lightbox.style.display = 'none';
+        }, 400);
+      });
+    });
+
+    // 🔖 Tabs
+    document.addEventListener('DOMContentLoaded', () => {
+      const labels = document.querySelectorAll('.tab-label');
+      const contents = document.querySelectorAll('.tab-content');
+      const indicador = document.querySelector('.barra-indicador');
+
+      function atualizarBarra(labelAtivo) {
+        indicador.style.left = labelAtivo.offsetLeft + 'px';
+        indicador.style.width = labelAtivo.offsetWidth + 'px';
+      }
+
+      labels.forEach(label => {
+        label.addEventListener('click', () => {
+          const tab = label.getAttribute('data-tab');
+          labels.forEach(el => el.classList.remove('active'));
+          contents.forEach(content => content.classList.remove('active'));
+          label.classList.add('active');
+          document.getElementById(tab).classList.add('active');
+          atualizarBarra(label);
+        });
+      });
+
+      const inicial = document.querySelector('.tab-label.active');
+      if (inicial) atualizarBarra(inicial);
+    });
+
+    // 💖 Botão Favorito
+    const favButton = document.querySelector('.fav-button');
+    const labelText = favButton.querySelector('.label-text');
+    const heartContainer = document.getElementById('heart-container');
+
+    favButton.addEventListener('click', () => {
+      const isClicked = favButton.classList.toggle('clicked');
+      labelText.textContent = isClicked ? 'Favorito' : 'Favoritar';
+
+      if (isClicked) {
+        const totalHearts = 50;
+        for (let i = 0; i < totalHearts; i++) {
+          const heart = document.createElement('div');
+          heart.classList.add('heart');
+          heart.style.left = `${Math.random() * 100}vw`;
+          heart.style.animationDuration = `${1 + Math.random()}s`;
+          heart.style.transform = `scale(${Math.random() * 0.8 + 0.6}) rotate(${Math.random() * 360}deg)`;
+          heartContainer.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }
+      }
+    });
+
+    // 👋 Boas-vindas, avatar e transição sincronizados
+    document.addEventListener('DOMContentLoaded', () => {
+      const entrada = document.getElementById('entrada-transicao');
+      const boasVindas = document.getElementById('boas-vindas');
+      const avatar = document.getElementById('avatar-foto');
+
+      const urlPerfil = new URLSearchParams(location.search).get('perfil');
+      if (urlPerfil) {
+        localStorage.setItem('perfilAmorFlix', urlPerfil);
+      }
+
+      const perfil = localStorage.getItem('perfilAmorFlix');
+
+      if (perfil) {
+        const nomeFormatado = perfil.charAt(0).toUpperCase() + perfil.slice(1).toLowerCase();
+        if (boasVindas) boasVindas.textContent = `Olá, ${nomeFormatado}!`;
+        if (avatar) {
+          avatar.src = `perfil-${perfil}.png`;
+          avatar.alt = `Perfil ${nomeFormatado}`;
+        }
+      }
+
+      if (entrada) {
+        setTimeout(() => entrada.classList.add('oculta'), 100);
+      }
+    });
+
+    // ☰ Painel flutuante
+    function togglePainel() {
+      const painel = document.getElementById('painel-perfil');
+      painel.classList.toggle('aberto');
+    }
+
+    function trocarPerfil() {
+      const transicao = document.getElementById('entrada-transicao');
+      localStorage.removeItem('perfilAmorFlix');
+      if (transicao) {
+        transicao.classList.remove('oculta');
+        setTimeout(() => window.location.href = 'perfil.html', 700);
+      } else {
+        window.location.href = 'perfil.html';
+      }
+    }
+  </script>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <title>AmorFlix – Escolha seu Perfil</title>
+  <style>
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(-45deg, #500509, #460808, #571d1d, #000000); /* Cores que remetem à Netflix */
+  background-size: 400% 400%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  animation: gradientAnimation 5s ease infinite; /* Animação do gradiente */
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+    h1.titulo {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: white;
+      animation: fadeInDown 1s ease;
+    }
+
+    .perfis {
+      display: flex;
+      gap: 2rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    .perfil {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .perfil:hover {
+      transform: scale(1.05);
+    }
+
+    .perfil img {
+      width: 100px;
+      height: 100px;
+      border-radius: 20%;
+      object-fit: cover;
+      border: 3px solid #e50914;
+    }
+
+    .perfil span {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .transicao {
+      position: fixed;
+      inset: 0;
+      background-color: #e50914;
+      z-index: 999;
+      pointer-events: none;
+      opacity: 0;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.7s ease, opacity 0.7s ease;
+    }
+
+    .transicao.ativa {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+
+    
+  </style>
+</head>
+
+<body>
+
+
+  <div class="transicao" id="transicao"></div>
+
+  <h1 class="titulo">Selecione seu Perfil</h1>
+
+  <div class="perfis">
+    <div class="perfil" onclick="selecionarPerfil('vi')">
+      <img src="perfil-vi.png" alt="Vi">
+      <span>Vi</span>
+    </div>
+    <div class="perfil" onclick="selecionarPerfil('bia')">
+      <img src="perfil-bia.png" alt="Bia">
+      <span>Bia</span>
+    </div>
+  </div>
+
+  <script>
+    function selecionarPerfil(nome) {
+      const transicao = document.getElementById('transicao');
+      transicao.classList.add('ativa');
+
+      setTimeout(() => {
+        window.location.href = `mobile.html?perfil=${nome}`;
+      }, 700); // tempo da transição
+    }
+  </script>
+</body>
+
+</html>
