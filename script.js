@@ -206,4 +206,20 @@ document.addEventListener('DOMContentLoaded', () => {
         profilePic.alt = `Perfil de ${nomePerfil}`;
     }
 
+    
+
 });
+
+document.querySelector(".play-button").addEventListener("click", function () {
+  document.getElementById("videoOverlay").style.display = "flex";
+});
+
+function fecharVideoOverlay() {
+  const video = document.getElementById("nossoVideo");
+  document.getElementById("videoOverlay").style.display = "none";
+  video.pause();
+  video.currentTime = 0;
+}
+
+
+
