@@ -56,6 +56,7 @@
         </div>
     </main>
 
+
     <p class="contadorTempo" id="contadorTempo"></p>
 
 
@@ -79,9 +80,12 @@
 
     </section>
 
-    <audio autoplay loop>
-        <source src="musica-romantica.mp3" type="audio/mpeg" />
+    <audio id="audioTema" autoplay loop>
+        <source src="Velha-Infância.mp3" type="audio/mpeg" />
     </audio>
+
+
+
 
     <script src="script.js"></script>
     <div class="modal" id="modal">
@@ -92,6 +96,16 @@
             </div>
         </div>
         <img class="modal-content" id="imagemModal" />
+    </div>
+
+    <div class="video-overlay" id="videoOverlay">
+        <div class="video-box">
+            <span class="fechar-video" onclick="fecharVideoOverlay()">×</span>
+            <video id="nossoVideo" controls autoplay>
+                <source src="nossa-historia.mp4" type="video/mp4">
+                Seu navegador não suporta esse vídeo.
+            </video>
+        </div>
     </div>
 
 </body>
